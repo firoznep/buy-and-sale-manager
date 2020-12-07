@@ -215,8 +215,8 @@ const ProductDetail = ({navigation}) => {
           <RenderProductItem
             item={item}
             handleDelete={() => handleDelete(Products, item)}
-            handleUpdate={() => {
-              let item1 = Products.get({id: item.id});
+            handleUpdate={async () => {
+              let item1 = await Products.get({id: item.id});
               dispatch(updateProAction(item1));
               navigation.navigate('UpdateProduct');
             }}

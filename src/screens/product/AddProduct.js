@@ -31,8 +31,8 @@ const AddProduct = () => {
           total_amount: '',
           description: '',
         }}
-        onSubmit={(values) => {
-          Products.insert(values);
+        onSubmit={async (values) => {
+          await Products.insert(values);
           alert('Product added');
         }}
         validationSchema={yupValidationSchema}>

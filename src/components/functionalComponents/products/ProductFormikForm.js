@@ -71,7 +71,7 @@ const ProductFormikForm = () => {
         <BasicDropdownPicker
           selectedValue={values.name}
           onValueChange={handleChange('name')}
-          title="Product Name">
+          title="Product Name *">
           {sortedUniqBy(filteredAllData, 'name').map((ven) => (
             <Picker.Item label={ven} value={ven} key={randomId()} />
           ))}

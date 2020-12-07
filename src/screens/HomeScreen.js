@@ -25,7 +25,7 @@ const HomeScreen = ({navigation}) => {
 
   useEffect(() => {
     Products.onChange(() => productDatabase());
-  });
+  }, [productDatabase]);
 
   // FUNCTIONS
   const productDatabase = async () => {

@@ -24,8 +24,8 @@ export const handleDelete = (products, item) => {
       },
       {
         text: 'Delete',
-        onPress: () => {
-          let id = products.get({id: item.id});
+        onPress: async () => {
+          let id = await products.get({id: item.id});
           products.remove(id);
           alert('Deleted');
         },
