@@ -1,20 +1,14 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {FlatList, RefreshControl, Text, View} from 'react-native';
+import {RefreshControl, Text, View} from 'react-native';
 
 import _ from 'lodash';
+
 import BasicButton from '../../components/basicComponents/BasicButton';
 import SafeScreen from '../../components/basicComponents/SafeScreen';
-import FlatItemSeparator from '../../components/functionalComponents/FlatItemSeparator';
-import RenderProductItem from '../../components/functionalComponents/products/RenderProductItems';
 import {Sales} from '../../database';
 import {styles} from '../../styles/styles';
 import {useDispatch, useSelector} from 'react-redux';
-import {
-  productFilterScreenVisibleAction,
-  updateProAction,
-} from '../../storeRedux/actions/productActions';
 import BasicModal from '../../components/basicComponents/BasicModal';
-import ModalItem from '../../components/functionalComponents/products/ModalItem';
 import {colors} from '../../colors/colors';
 import RenderProductChildItem from '../../components/functionalComponents/products/RenderProductChildItem';
 import {formatToCurrencyInd, getTotal} from '../../util/utilFunc';

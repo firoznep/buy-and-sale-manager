@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {RefreshControl, ScrollView, Text, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 
 import _ from 'lodash';
@@ -11,8 +11,15 @@ import {filterAllDataAction} from '../storeRedux/actions/productActions';
 import {formatToCurrencyInd, getTotal} from '../util/utilFunc';
 import RenderProductChildItem from '../components/functionalComponents/products/RenderProductChildItem';
 import {filterAllSaleDataAction} from '../storeRedux/actions/saleAction';
+import BasicModal from '../components/basicComponents/BasicModal';
 
 const HomeScreen = ({navigation}) => {
+  // USESTATES
+  // const [productModalVisible, setProductModalVisible] = useState(false);
+  // const [saleModalVisible, setSaleModalVisible] = useState(false);
+
+  const [reFreshing, setRefreshing] = useState(false);
+
   // USESELECTOR
   const filteredAllData = useSelector(
     (state) => state.productReducer.filter.allData,
@@ -43,6 +50,15 @@ const HomeScreen = ({navigation}) => {
     });
   }, [saleDatabase]);
 
+  // ONFRESH
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1500);
+  });
+
   // FUNCTIONS
   const productDatabase = async () => {
     const proDatabase = await Products.data();
@@ -54,83 +70,52 @@ const HomeScreen = ({navigation}) => {
     dispatch(filterAllSaleDataAction(proDatabase));
   };
 
-  // console.log(filteredAllSaleData);
+  let productqnt = getTotal(filteredAllData, 'quantity');
+  let saleQnt = getTotal(filteredAllSaleData, 'quantity');
+
+  let productAmt = getTotal(filteredAllData, 'total_amount');
+  let saleAmt = getTotal(filteredAllSaleData, 'total_amount');
+
   return (
     <SafeScreen>
       <ScrollView
         style={{
           flex: 1,
           backgroundColor: 'white',
-        }}>
-        <View
-          style={{
-            flexDirection: 'row',
-            flexWrap: 'wrap',
-            justifyContent: 'space-between',
-          }}>
-          <TouchableOpacity style={styles.homeItems}>
-            <Text
-              style={{
-                width: '100%',
-                fontWeight: 'bold',
-                fontSize: 24,
-                textAlign: 'center',
-              }}>
-              Purchase
-            </Text>
-            <RenderProductChildItem
-              title="Purchase Entry"
-              item={filteredAllData.length}
-            />
-            <RenderProductChildItem
-              title="Purchase Quantity"
-              item={getTotal(filteredAllData, 'quantity')}
-            />
-            <RenderProductChildItem
-              title="Purchase Amount"
-              item={formatToCurrencyInd(
-                getTotal(filteredAllData, 'total_amount'),
-              )}
-            />
-          </TouchableOpacity>
+        }}
+        refreshControl={
+          <RefreshControl refreshing={reFreshing} onRefresh={onRefresh} />
+        }>
+        <View style={styles.homeItems}>
+          <Text style={styles.selfAlign}>Balance</Text>
+          <RenderProductChildItem
+            title="Products Qnt In Stock"
+            item={productqnt - saleQnt}
+          />
+          <RenderProductChildItem
+            title="Amount Of Products In Stock"
+            item={formatToCurrencyInd(productAmt - saleAmt)}
+          />
+        </View>
 
-          <TouchableOpacity style={styles.homeItems}>
-            <Text
-              style={{
-                width: '100%',
-                fontWeight: 'bold',
-                fontSize: 24,
-                textAlign: 'center',
-              }}>
-              Sale
-            </Text>
-            <RenderProductChildItem
-              title="Sale Entry"
-              item={filteredAllSaleData.length}
-            />
-            <RenderProductChildItem
-              title="Sale Quantity"
-              item={getTotal(filteredAllSaleData, 'price')}
-            />
-            <RenderProductChildItem
-              title="Sale Amount"
-              item={formatToCurrencyInd(
-                getTotal(filteredAllSaleData, 'total_amount'),
-              )}
-            />
-          </TouchableOpacity>
+        <View style={styles.homeItems}>
+          <Text style={styles.selfAlign}>Purchase</Text>
 
-          <TouchableOpacity style={styles.homeItems}>
-            <Text>Placeholder</Text>
-          </TouchableOpacity>
+          <RenderProductChildItem title="Purchase Quantity" item={productqnt} />
+          <RenderProductChildItem
+            title="Purchase Amount"
+            item={formatToCurrencyInd(productAmt)}
+          />
+        </View>
 
-          <TouchableOpacity style={styles.homeItems}>
-            <Text>Placeholder</Text>
-          </TouchableOpacity>
+        <View style={styles.homeItems}>
+          <Text style={styles.selfAlign}>Sale</Text>
 
-          <TouchableOpacity style={styles.homeItems}>
-            <Text>Placeholder</Text>
-          </TouchableOpacity>
+          <RenderProductChildItem title="Sale Quantity" item={saleQnt} />
+          <RenderProductChildItem
+            title="Sale Amount"
+            item={formatToCurrencyInd(saleAmt)}
+          />
         </View>
       </ScrollView>
     </SafeScreen>

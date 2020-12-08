@@ -1,11 +1,11 @@
 import React from 'react';
 import {Formik} from 'formik';
 
-import SafeScreen from '../../components/basicComponents/SafeScreen';
+import {useSelector} from 'react-redux';
 
 import {Sales} from '../../database';
 
-import {useSelector} from 'react-redux';
+import SafeScreen from '../../components/basicComponents/SafeScreen';
 import {saleYupValidation} from '../../util/saleYupValidation';
 import SaleFormikForm from '../../components/functionalComponents/sale/SaleFormikForm';
 

@@ -1,14 +1,12 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 
-import {ScrollView, Text, View} from 'react-native';
+import {ScrollView, View} from 'react-native';
 
 import {useFormikContext} from 'formik';
 
 import {Picker} from '@react-native-picker/picker';
 
 import _ from 'lodash';
-
-import * as yup from 'yup';
 
 import BasicInput from '../../basicComponents/BasicInput';
 import ModalDateTimePicker from '../../basicComponents/ModalDateTimePicker';
@@ -20,12 +18,11 @@ import ErrorMsg from '../ErrorMsg';
 import {sortedUniqDataByTwoCon, sortedUniqBy} from '../../../util/sortedUniq';
 import {useSelector} from 'react-redux';
 import BasicButton from '../../basicComponents/BasicButton';
-import {Products} from '../../../database';
 import DropdownPicker from '../DropdownPicker';
 
+// MAIN COMPONENT
 const SaleFormikForm = () => {
-  const [sumOfQnt, setSumOfQnt] = useState([]);
-
+  // USESELECTORS
   const filterAllProduct = useSelector((state) =>
     state.productReducer.filter.allData.sort(
       (a, b) => new Date(b.date) - new Date(a.date),
@@ -38,6 +35,7 @@ const SaleFormikForm = () => {
     ),
   );
 
+  // USEFORMIKCONTEXT
   const {
     values,
     handleBlur,
@@ -48,33 +46,15 @@ const SaleFormikForm = () => {
     errors,
   } = useFormikContext();
 
+  // USEEFFECT
   useEffect(() => {
     setFieldValue(
       'total_amount',
       getTotalAmt(values.price, 0, values.quantity),
     );
-    if (values.quantity > qntNameModel()) {
-      alert(`Quantity must be less than: ${qntNameModel()}`);
-      setFieldValue('quantity', qntNameModel().toString());
-    }
   }, [values.price, values.quantity]);
 
-  // useEffect(() => {
-  //   qntNameModel();
-  // }, [values.product_Name, values.model]);
-
-  // console.log('qnt ', values.quantity);
-  // console.log('arrofqnt ', getIdTo);
-
-  const qntNameModel = () => {
-    let rr = filterAllProduct.filter(
-      (itm) => itm.name === values.product_Name && itm.model === values.model,
-    );
-
-    let res = rr.map((itm) => itm.quantity);
-    return _.sum(res);
-  };
-
+  // MAIN RETURN
   return (
     <>
       <ScrollView keyboardShouldPersistTaps="handled">
@@ -124,8 +104,6 @@ const SaleFormikForm = () => {
           </DropdownPicker>
           <ErrorMsg errField={errors.model} touchedField={touched.model} />
         </View>
-
-        <Text>Quantity Available In Stock: {qntNameModel()}</Text>
 
         {/* QUANTITY */}
         <BasicInput

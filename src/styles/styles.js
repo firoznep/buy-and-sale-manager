@@ -81,7 +81,6 @@ export const styles = StyleSheet.create({
 
   modalViewChild: {
     width: '95%',
-    height: '60%',
     backgroundColor: colors.backGColor,
     padding: 5,
     borderRadius: 10,
@@ -111,6 +110,13 @@ export const styles = StyleSheet.create({
     width: '100%',
     height: 1,
     backgroundColor: colors.phGray,
+  },
+
+  selfAlign: {
+    width: '100%',
+    fontWeight: 'bold',
+    fontSize: 24,
+    textAlign: 'center',
   },
 
   subChildItem: {color: colors.phGray, fontSize: 10},

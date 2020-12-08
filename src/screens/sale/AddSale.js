@@ -2,13 +2,11 @@ import React from 'react';
 
 import {Formik} from 'formik';
 
-import {Products, Sales} from '../../database';
+import {Sales} from '../../database';
 
 import _ from 'lodash';
 
 import SafeScreen from '../../components/basicComponents/SafeScreen';
-import {yupValidationSchema} from '../../util/yupValidationSchema';
-import ProductFormikForm from '../../components/functionalComponents/products/ProductFormikForm';
 import SaleFormikForm from '../../components/functionalComponents/sale/SaleFormikForm';
 import {saleYupValidation} from '../../util/saleYupValidation';
 

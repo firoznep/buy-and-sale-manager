@@ -1,14 +1,16 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {FlatList, RefreshControl, Text, View} from 'react-native';
+import {RefreshControl, Text, View} from 'react-native';
 
 import _ from 'lodash';
+
+import {Products} from '../../database';
+
+import {useDispatch, useSelector} from 'react-redux';
+
 import BasicButton from '../../components/basicComponents/BasicButton';
 import SafeScreen from '../../components/basicComponents/SafeScreen';
-import FlatItemSeparator from '../../components/functionalComponents/FlatItemSeparator';
 import RenderProductItem from '../../components/functionalComponents/products/RenderProductItems';
-import {Products} from '../../database';
 import {styles} from '../../styles/styles';
-import {useDispatch, useSelector} from 'react-redux';
 import {
   flatListRefreshedAction,
   productFilterScreenVisibleAction,
@@ -28,7 +30,6 @@ const ProductDetail = ({navigation}) => {
   // USESTATES
   const [filteredData, setFilteredData] = useState([]);
   const [filterBy, setFilterBy] = useState('');
-
   const [totalQnt, setTotalQnt] = useState('');
   const [totalRealCost, setTotalRealCost] = useState('');
   const [totalAmount, setTotalAmount] = useState('');
