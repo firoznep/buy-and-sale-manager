@@ -18,6 +18,7 @@ const RenderProductChildItem = ({
           maxWidth: maxWidth,
           marginVertical: 2,
           paddingLeft: 5,
+          margin: 5,
           borderLeftWidth: 1,
           borderLeftColor: colors.fbBlue,
         },

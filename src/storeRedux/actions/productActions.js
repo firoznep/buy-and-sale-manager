@@ -40,11 +40,6 @@ export const productFilterScreenVisibleAction = (payload) => ({
   payload,
 });
 
-export const saleFilterScreenVisibleAction = (payload) => ({
-  type: SALE_FILTER_SCREEN_VISIBLE,
-  payload,
-});
-
 export const flatListRefreshedAction = (payload) => ({
   type: IS_FLATLIST_REFRESHED,
   payload,

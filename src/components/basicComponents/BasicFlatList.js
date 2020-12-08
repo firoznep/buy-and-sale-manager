@@ -1,6 +1,8 @@
 import React from 'react';
 import {FlatList, Text, View} from 'react-native';
+import {colors} from '../../colors/colors';
 import {VIEWABILITY_CONFIG} from '../../util/utilFunc';
+import FooterComponent from '../FooterComponent';
 import FlatItemSeparator from '../functionalComponents/FlatItemSeparator';
 
 const BasicFlatList = ({data, renderItem, refreshControl}) => {
@@ -17,6 +19,7 @@ const BasicFlatList = ({data, renderItem, refreshControl}) => {
       removeClippedSubviews={true}
       viewabilityConfig={VIEWABILITY_CONFIG}
       refreshControl={refreshControl}
+      ListFooterComponent={() => <View style={{height: 110}}></View>}
     />
   );
 };

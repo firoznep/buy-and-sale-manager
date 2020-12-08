@@ -8,11 +8,11 @@ import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 import {colors} from '../colors/colors';
 import UpdateProduct from '../screens/product/UpdateProduct';
 import {useDispatch} from 'react-redux';
-import {
-  productFilterScreenVisibleAction,
-  saleFilterScreenVisibleAction,
-} from '../storeRedux/actions/productActions';
+import {productFilterScreenVisibleAction} from '../storeRedux/actions/productActions';
 import BasicButton from '../components/basicComponents/BasicButton';
+import AddSale from '../screens/sale/AddSale';
+import {saleFilterScreenVisibleAction} from '../storeRedux/actions/saleAction';
+import UpdateSale from '../screens/sale/UpdateSale';
 
 function getHeaderTitle(route) {
   const routeName = getFocusedRouteNameFromRoute(route) ?? 'HomeScreen';
@@ -74,6 +74,9 @@ const StackNavigator = () => {
       />
       <Stack.Screen name="AddProduct" component={AddProduct} />
       <Stack.Screen name="UpdateProduct" component={UpdateProduct} />
+
+      <Stack.Screen name="AddSale" component={AddSale} />
+      <Stack.Screen name="UpdateSale" component={UpdateSale} />
     </Stack.Navigator>
   );
 };

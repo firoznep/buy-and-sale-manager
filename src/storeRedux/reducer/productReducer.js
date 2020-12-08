@@ -7,7 +7,7 @@ import {
   FILTER_BY_VENDOR,
   IS_FLATLIST_REFRESHED,
   PRODUCT_FILTER_SCREEN_VISIBLE,
-  SALE_FILTER_SCREEN_VISIBLE,
+  // SALE_FILTER_SCREEN_VISIBLE,
   UPDATE_PRO_BY_ID,
 } from '../actions/productActionType';
 
@@ -21,7 +21,7 @@ const INITIAL_STATE = {
   },
   updateItemById: {},
   isProductFilterScreenVisible: false,
-  isSaleFilterScreenVisible: false,
+  // isSaleFilterScreenVisible: false,
   isFlatListRefreshed: false,
 };
 
@@ -45,8 +45,8 @@ const ProductReducer = (state = INITIAL_STATE, action) => {
     case PRODUCT_FILTER_SCREEN_VISIBLE:
       return {...state, isProductFilterScreenVisible: action.payload};
 
-    case SALE_FILTER_SCREEN_VISIBLE:
-      return {...state, isSaleFilterScreenVisible: action.payload};
+    // case SALE_FILTER_SCREEN_VISIBLE:
+    //   return {...state, isSaleFilterScreenVisible: action.payload};
 
     case IS_FLATLIST_REFRESHED:
       return {...state, isFlatListRefreshed: action.payload};

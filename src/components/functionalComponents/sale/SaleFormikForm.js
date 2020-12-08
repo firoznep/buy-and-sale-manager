@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {ScrollView, Text, View} from 'react-native';
 
@@ -8,6 +8,8 @@ import {Picker} from '@react-native-picker/picker';
 
 import _ from 'lodash';
 
+import * as yup from 'yup';
+
 import BasicInput from '../../basicComponents/BasicInput';
 import ModalDateTimePicker from '../../basicComponents/ModalDateTimePicker';
 import {getTotalAmt, randomId} from '../../../util/utilFunc';
@@ -15,14 +17,25 @@ import {styles} from '../../../styles/styles';
 import BasicDropdownPicker from '../../basicComponents/BasicDropdownPicker';
 import {colors} from '../../../colors/colors';
 import ErrorMsg from '../ErrorMsg';
-import {getOnTwoCondition, sortedUniqBy} from '../../../util/sortedUniq';
+import {sortedUniqDataByTwoCon, sortedUniqBy} from '../../../util/sortedUniq';
 import {useSelector} from 'react-redux';
 import BasicButton from '../../basicComponents/BasicButton';
 import {Products} from '../../../database';
+import DropdownPicker from '../DropdownPicker';
 
 const SaleFormikForm = () => {
+  const [sumOfQnt, setSumOfQnt] = useState([]);
+
   const filterAllProduct = useSelector((state) =>
-    _.reverse([...state.productReducer.allProducts.data()]),
+    state.productReducer.filter.allData.sort(
+      (a, b) => new Date(b.date) - new Date(a.date),
+    ),
+  );
+
+  const filterAllSaleProduct = useSelector((state) =>
+    state.saleReducer.filter.allSaleData.sort(
+      (a, b) => new Date(b.date) - new Date(a.date),
+    ),
   );
 
   const {
@@ -40,27 +53,27 @@ const SaleFormikForm = () => {
       'total_amount',
       getTotalAmt(values.price, 0, values.quantity),
     );
-
-    return () => {};
+    if (values.quantity > qntNameModel()) {
+      alert(`Quantity must be less than: ${qntNameModel()}`);
+      setFieldValue('quantity', qntNameModel().toString());
+    }
   }, [values.price, values.quantity]);
 
-  useEffect(() => {
-    qntNameModel();
-    return () => {};
-  }, [values.productName]);
+  // useEffect(() => {
+  //   qntNameModel();
+  // }, [values.product_Name, values.model]);
+
+  // console.log('qnt ', values.quantity);
+  // console.log('arrofqnt ', getIdTo);
 
   const qntNameModel = () => {
-    const res = Products.data()
-      .filter(
-        (itm) =>
-          itm.name === values.productName &&
-          itm.model === values.model &&
-          itm.color === values.color,
-      )
-      .map((itm) => itm.quantity);
+    let rr = filterAllProduct.filter(
+      (itm) => itm.name === values.product_Name && itm.model === values.model,
+    );
+
+    let res = rr.map((itm) => itm.quantity);
     return _.sum(res);
   };
-  // console.log(qntNameModel());
 
   return (
     <>
@@ -71,55 +84,48 @@ const SaleFormikForm = () => {
           title={new Date(values.date).toDateString()}
         />
 
-        {/* CUSTOMER */}
-        <BasicInput
-          label="Customer"
-          onChangeText={handleChange('customer')}
-          onBlur={handleBlur('customer')}
-          value={values.customer}
-        />
-
-        {/* PRODUCT NAME */}
+        {/* CUSTOMER NAME */}
         <BasicDropdownPicker
-          minWidth="100%"
-          selectedValue={values.productName}
-          title="Product Name"
-          onValueChange={handleChange('productName')}>
-          <Picker.Item
-            label="Select Product Name"
-            value=""
-            color={colors.phGray}
-          />
-          {sortedUniqBy(filterAllProduct, 'name').map((elm) => {
+          selectedValue={values.customer}
+          title="Customer Name"
+          onValueChange={handleChange('customer')}>
+          {sortedUniqBy(filterAllSaleProduct, 'customer').map((elm) => {
             return <Picker.Item label={elm} value={elm} key={randomId()} />;
           })}
         </BasicDropdownPicker>
+
+        {/* PRODUCT NAME */}
+        <DropdownPicker
+          title="Product Name"
+          selectedValue={values.product_Name}
+          onValueChange={handleChange('product_Name')}>
+          {sortedUniqBy(filterAllProduct, 'name').map((elm) => {
+            return <Picker.Item label={elm} value={elm} key={randomId()} />;
+          })}
+        </DropdownPicker>
         <ErrorMsg
-          errField={errors.productName}
-          touchedField={touched.productName}
+          errField={errors.product_Name}
+          touchedField={touched.product_Name}
         />
 
         {/* MODEL */}
         <View>
-          <BasicDropdownPicker
-            minWidth={190}
+          <DropdownPicker
             selectedValue={values.model}
             title="Model"
             onValueChange={handleChange('model')}>
-            <Picker.Item label="Select Model" value="" color={colors.phGray} />
-            <Picker.Item label="Model Not Available" value="" />
-            {getOnTwoCondition(
+            {sortedUniqDataByTwoCon(
               filterAllProduct,
-              values.productName,
+              values.product_Name,
               'model',
             ).map((elm) => {
               return <Picker.Item label={elm} value={elm} key={randomId()} />;
             })}
-          </BasicDropdownPicker>
+          </DropdownPicker>
           <ErrorMsg errField={errors.model} touchedField={touched.model} />
         </View>
 
-        <Text>Total Quantity In Stock: {qntNameModel()}</Text>
+        <Text>Quantity Available In Stock: {qntNameModel()}</Text>
 
         {/* QUANTITY */}
         <BasicInput
@@ -127,6 +133,7 @@ const SaleFormikForm = () => {
           onChangeText={handleChange('quantity')}
           onBlur={handleBlur('quantity')}
           keyboardType="numeric"
+          maxLength={6}
           value={values.quantity}
         />
         <ErrorMsg errField={errors.quantity} touchedField={touched.quantity} />
@@ -137,6 +144,7 @@ const SaleFormikForm = () => {
           onChangeText={handleChange('price')}
           onBlur={handleBlur('price')}
           keyboardType="numeric"
+          maxLength={7}
           value={values.price}
         />
         <ErrorMsg errField={errors.price} touchedField={touched.price} />
@@ -158,55 +166,17 @@ const SaleFormikForm = () => {
             justifyContent: 'space-between',
           }}>
           {/* PAYMENT METHOD */}
-          <BasicDropdownPicker
+          <DropdownPicker
             selectedValue={values.payment_method}
             title="Payment Method"
             onValueChange={handleChange('payment_method')}>
             <Picker.Item label="Cash" value="Cash" />
             <Picker.Item label="Credit" value="Credit" />
-          </BasicDropdownPicker>
-
-          {/* SIZE */}
-          <View>
-            <BasicDropdownPicker
-              selectedValue={values.size}
-              title="Size"
-              onValueChange={handleChange('size')}>
-              <Picker.Item label="Get Size" value="" color={colors.phGray} />
-              <Picker.Item label="Size Not Available" value="" />
-              {getOnTwoCondition(
-                filterAllProduct,
-                values.productName,
-                'size',
-              ).map((elm) => {
-                return <Picker.Item label={elm} value={elm} key={randomId()} />;
-              })}
-            </BasicDropdownPicker>
-            <ErrorMsg errField={errors.size} touchedField={touched.size} />
-          </View>
-
-          {/* UNIT */}
-          <View>
-            <BasicDropdownPicker
-              selectedValue={values.unit}
-              title="Unit"
-              onValueChange={handleChange('unit')}>
-              <Picker.Item label="Get Unit" value="" color={colors.phGray} />
-
-              {getOnTwoCondition(
-                filterAllProduct,
-                values.productName,
-                'unit',
-              ).map((elm) => {
-                return <Picker.Item label={elm} value={elm} key={randomId()} />;
-              })}
-            </BasicDropdownPicker>
-            <ErrorMsg errField={errors.unit} touchedField={touched.unit} />
-          </View>
+          </DropdownPicker>
 
           {/* COLOR */}
           <View>
-            <BasicDropdownPicker
+            <DropdownPicker
               minWidth={190}
               selectedValue={values.color}
               title="Color"
@@ -216,17 +186,45 @@ const SaleFormikForm = () => {
                 value=""
                 color={colors.phGray}
               />
-              {/* <Picker.Item label="Model Not Available" value="" /> */}
-              {getOnTwoCondition(
+              {sortedUniqDataByTwoCon(
                 filterAllProduct,
-                values.productName,
+                values.product_Name,
                 'color',
               ).map((elm) => {
                 return <Picker.Item label={elm} value={elm} key={randomId()} />;
               })}
-            </BasicDropdownPicker>
+            </DropdownPicker>
             <ErrorMsg errField={errors.color} touchedField={touched.color} />
           </View>
+
+          {/* SIZE */}
+          <DropdownPicker
+            minWidth={145}
+            selectedValue={values.size}
+            title="Size"
+            onValueChange={handleChange('size')}>
+            {sortedUniqDataByTwoCon(
+              filterAllProduct,
+              values.product_Name,
+              'size',
+            ).map((elm) => {
+              return <Picker.Item label={elm} value={elm} key={randomId()} />;
+            })}
+          </DropdownPicker>
+
+          {/* UNIT */}
+          <DropdownPicker
+            selectedValue={values.unit}
+            title="Unit"
+            onValueChange={handleChange('unit')}>
+            {sortedUniqDataByTwoCon(
+              filterAllProduct,
+              values.product_Name,
+              'unit',
+            ).map((elm) => {
+              return <Picker.Item label={elm} value={elm} key={randomId()} />;
+            })}
+          </DropdownPicker>
         </View>
 
         {/* DESCRIPTION */}

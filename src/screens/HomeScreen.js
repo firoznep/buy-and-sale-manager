@@ -6,26 +6,42 @@ import _ from 'lodash';
 
 import SafeScreen from '../components/basicComponents/SafeScreen';
 import {styles} from '../styles/styles';
-import {Products} from '../database';
+import {Products, Sales} from '../database';
 import {filterAllDataAction} from '../storeRedux/actions/productActions';
 import {formatToCurrencyInd, getTotal} from '../util/utilFunc';
 import RenderProductChildItem from '../components/functionalComponents/products/RenderProductChildItem';
+import {filterAllSaleDataAction} from '../storeRedux/actions/saleAction';
 
 const HomeScreen = ({navigation}) => {
+  // USESELECTOR
   const filteredAllData = useSelector(
     (state) => state.productReducer.filter.allData,
   );
 
+  const filteredAllSaleData = useSelector(
+    (state) => state.saleReducer.filter.allSaleData,
+  );
+
+  // DISPATCH
   const dispatch = useDispatch();
 
   // USEEFFECT
   useEffect(() => {
     productDatabase();
+    saleDatabase();
   }, []);
 
   useEffect(() => {
-    Products.onChange(() => productDatabase());
+    Products.onChange(() => {
+      productDatabase();
+    });
   }, [productDatabase]);
+
+  useEffect(() => {
+    Sales.onChange(() => {
+      saleDatabase();
+    });
+  }, [saleDatabase]);
 
   // FUNCTIONS
   const productDatabase = async () => {
@@ -33,6 +49,12 @@ const HomeScreen = ({navigation}) => {
     dispatch(filterAllDataAction(proDatabase));
   };
 
+  const saleDatabase = async () => {
+    const proDatabase = await Sales.data();
+    dispatch(filterAllSaleDataAction(proDatabase));
+  };
+
+  // console.log(filteredAllSaleData);
   return (
     <SafeScreen>
       <ScrollView
@@ -57,15 +79,15 @@ const HomeScreen = ({navigation}) => {
               Purchase
             </Text>
             <RenderProductChildItem
-              title="Total Purchase Entry"
+              title="Purchase Entry"
               item={filteredAllData.length}
             />
             <RenderProductChildItem
-              title="Total Purchase Quantity"
+              title="Purchase Quantity"
               item={getTotal(filteredAllData, 'quantity')}
             />
             <RenderProductChildItem
-              title="Total Purchase Amount"
+              title="Purchase Amount"
               item={formatToCurrencyInd(
                 getTotal(filteredAllData, 'total_amount'),
               )}
@@ -73,7 +95,29 @@ const HomeScreen = ({navigation}) => {
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.homeItems}>
-            <Text>Placeholder</Text>
+            <Text
+              style={{
+                width: '100%',
+                fontWeight: 'bold',
+                fontSize: 24,
+                textAlign: 'center',
+              }}>
+              Sale
+            </Text>
+            <RenderProductChildItem
+              title="Sale Entry"
+              item={filteredAllSaleData.length}
+            />
+            <RenderProductChildItem
+              title="Sale Quantity"
+              item={getTotal(filteredAllSaleData, 'price')}
+            />
+            <RenderProductChildItem
+              title="Sale Amount"
+              item={formatToCurrencyInd(
+                getTotal(filteredAllSaleData, 'total_amount'),
+              )}
+            />
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.homeItems}>

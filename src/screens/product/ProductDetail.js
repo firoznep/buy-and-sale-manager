@@ -42,10 +42,6 @@ const ProductDetail = ({navigation}) => {
     (state) => state.productReducer.isProductFilterScreenVisible,
   );
 
-  const isSaleFilterScreenVisible = useSelector(
-    (state) => state.productReducer.isSaleFilterScreenVisible,
-  );
-
   const filteredAllData = useSelector((state) =>
     state.productReducer.filter.allData.sort(
       (a, b) => new Date(b.date) - new Date(a.date),

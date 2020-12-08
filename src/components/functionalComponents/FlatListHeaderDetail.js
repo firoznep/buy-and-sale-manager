@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Text, View} from 'react-native';
+import {ActivityIndicator, Text, View} from 'react-native';
 import {colors} from '../../colors/colors';
 
 const FlatListHeaderDetail = ({data, children}) => {
@@ -15,11 +15,10 @@ const FlatListHeaderDetail = ({data, children}) => {
         alignItems: 'center',
       }}>
       {!avail ? (
-        <Text style={{color: colors.fbBlue, fontSize: 20}}>Loading...</Text>
-      ) : null}
-      {avail ? (
+        <ActivityIndicator size="large" color="#2991e0" />
+      ) : (
         <Text style={{color: 'red', fontSize: 24}}>No Data Abailable!</Text>
-      ) : null}
+      )}
     </View>
   ) : (
     <View>{children}</View>

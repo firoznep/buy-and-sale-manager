@@ -14,7 +14,7 @@ const UpdateProduct = () => {
     <SafeScreen>
       <Formik
         initialValues={{
-          date: new Date(),
+          date: updItem.date,
           vendor: updItem.vendor,
           name: updItem.name,
           model: updItem.model,

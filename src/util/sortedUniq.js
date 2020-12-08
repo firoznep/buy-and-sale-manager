@@ -11,3 +11,8 @@ export const sortedUniqBy = (arr, by) => {
     ),
   );
 };
+
+export const sortedUniqDataByTwoCon = (arr, name, by) => {
+  let fd = arr.filter((item) => item.name === name);
+  return _.compact(_.orderBy(_.uniq(fd.map((itm) => itm[by]))));
+};

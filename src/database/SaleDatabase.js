@@ -3,7 +3,7 @@ export const SaleModel = {
   props: {
     date: '?datetime',
     customer: '?string',
-    productName: 'string',
+    product_Name: 'string',
     quantity: 'int',
     price: 'int',
     total_amount: 'int',
