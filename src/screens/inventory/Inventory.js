@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Text, View} from 'react-native';
+import {ScrollView, Text, View} from 'react-native';
 
 import {Picker} from '@react-native-picker/picker';
 
@@ -36,9 +36,11 @@ const Inventory = () => {
   const [totalSaleAmount, setTotalSaleAmount] = useState('');
 
   const [filteredName, setFilteredName] = useState('');
+  const [filteredModel, setFilteredModel] = useState('');
 
   const [selectedOne, setSelectedOne] = useState(true);
   const [selectedTwo, setSelectedTwo] = useState(false);
+  const [selectedThree, setSelectedThree] = useState(false);
 
   // USESELECTOR
   const filteredAllData = useSelector(
@@ -53,7 +55,7 @@ const Inventory = () => {
   useEffect(() => {
     // console.log('effect');
     return setDataByfiltering();
-  }, [filteredName, selectedOne, selectedTwo]);
+  }, [filteredName, selectedOne, selectedTwo, selectedThree, filteredModel]);
 
   // FUNCTIONS
 
@@ -62,6 +64,27 @@ const Inventory = () => {
       data.filter((itm) => itm[type] === by).map((i) => i[mapBy]),
     );
     return res;
+  };
+
+  const getNameModelAmtQnt = (data, nameType, byName, byModel, mapBy) => {
+    let res = _.sum(
+      data
+        .filter((itm) => itm[nameType] === byName && itm.model === byModel)
+        .map((i) => i[mapBy]),
+    );
+    return res;
+  };
+
+  const filterNameModelMap = () => {
+    const filterNameModel = filteredAllData.filter(
+      (nm) => nm.name === filteredName,
+    );
+
+    const fnmm = _.compact(
+      _.orderBy(_.uniq(filterNameModel.map((itm) => itm.model))),
+    );
+
+    return fnmm;
   };
 
   const setDataByfiltering = () => {
@@ -113,16 +136,67 @@ const Inventory = () => {
         setTotalQnt(fpq - fsq == 0 ? '0 ' : fpq - fsq);
         setTotalAmount(formatToCurrencyInd(fpa - fsa));
         break;
+
+      case 'nameModel':
+        let fnaq = getNameModelAmtQnt(
+          filteredAllData,
+          'name',
+          filteredName,
+          filteredModel,
+          'quantity',
+        );
+        let fsnmq = getNameModelAmtQnt(
+          filteredAllSaleData,
+          'product_Name',
+          filteredName,
+          filteredModel,
+          'quantity',
+        );
+
+        let fpnma = getNameModelAmtQnt(
+          filteredAllData,
+          'name',
+          filteredName,
+          filteredModel,
+          'total_amount',
+        );
+        let fsnma = getNameModelAmtQnt(
+          filteredAllSaleData,
+          'product_Name',
+          filteredName,
+          filteredModel,
+          'total_amount',
+        );
+
+        setTotalProQnt(fnaq == 0 ? '0 ' : fnaq);
+        setTotalSaleQnt(fsnmq == 0 ? '0 ' : fsnmq);
+
+        setTotalProAmount(formatToCurrencyInd(fpnma));
+        setTotalSaleAmount(formatToCurrencyInd(fsnma));
+
+        setTotalQnt(fnaq - fsnmq == 0 ? '0 ' : fnaq - fsnmq);
+        setTotalAmount(formatToCurrencyInd(fpnma - fsnma));
+        break;
+    }
+  };
+
+  const fltTitle = (byAll, byName, byNameModel) => {
+    if (filterBy === 'all') {
+      return byAll;
+    } else if (filterBy === 'name') {
+      return byName;
+    } else if (filterBy === 'nameModel') {
+      return byNameModel;
+    } else {
+      return 'Set Filter';
     }
   };
 
   return (
     <SafeScreen>
-      <View
+      <ScrollView
         style={{
           flex: 1,
-          borderBottomWidth: 3,
-          borderBottomColor: colors.fbBlue,
         }}>
         <View
           style={{
@@ -137,6 +211,7 @@ const Inventory = () => {
               setFilterBy('all');
               setSelectedOne(true);
               setSelectedTwo(false);
+              setSelectedThree(false);
             }}
           />
         </View>
@@ -149,6 +224,7 @@ const Inventory = () => {
               setFilterBy('name');
               setSelectedOne(false);
               setSelectedTwo(true);
+              setSelectedThree(false);
             }}
           />
 
@@ -161,62 +237,105 @@ const Inventory = () => {
             ))}
           </DropdownPicker>
         </View>
-      </View>
+
+        <View
+          style={{
+            backgroundColor: colors.white,
+            borderLeftWidth: 1,
+            marginVertical: 5,
+          }}>
+          <BasicRadioButton
+            radioTitle="Filter by product name and model"
+            selected={selectedThree}
+            onPress={() => {
+              setFilterBy('nameModel');
+              setSelectedOne(false);
+              setSelectedTwo(false);
+              setSelectedThree(true);
+            }}
+          />
+
+          <DropdownPicker
+            selectedValue={filteredName}
+            onValueChange={(val) => setFilteredName(val)}
+            title="Product Name">
+            {sortedUniqBy(filteredAllData, 'name').map((ven) => (
+              <Picker.Item label={ven} value={ven} key={randomId()} />
+            ))}
+          </DropdownPicker>
+
+          <DropdownPicker
+            selectedValue={filteredModel}
+            onValueChange={(val) => setFilteredModel(val)}
+            title="Product Model">
+            {filterNameModelMap().map((ven) => (
+              <Picker.Item label={ven} value={ven} key={randomId()} />
+            ))}
+          </DropdownPicker>
+        </View>
+      </ScrollView>
 
       {/* RESULT */}
-      <View style={{flex: 2}}>
+      <ScrollView style={{flex: 1}}>
         <View style={{backgroundColor: colors.white, marginVertical: 10}}>
-          <Text style={{fontSize: 20, textAlign: 'center'}}>Quantity</Text>
+          <Text style={{fontWeight: 'bold', textAlign: 'center'}}>
+            Quantity
+          </Text>
           <RenderProductChildItem
-            item={totalProQnt}
-            title={`${
-              filterBy === 'all'
-                ? 'All purchased quantity'
-                : `Purchased: ${filteredName}`
-            }`}
+            item={`Qnt: ${totalProQnt}`}
+            title={fltTitle(
+              'Total purchased',
+              `Purchased: product-${filteredName}`,
+              `Purchased: product-${filteredName}, model-${filteredModel}`,
+            )}
+          />
+
+          <RenderProductChildItem
+            item={`Qnt: ${totalSaleQnt}`}
+            title={fltTitle(
+              `Total sold`,
+              `Sold: product-${filteredName}`,
+              `Sold: product-${filteredName}, model-${filteredModel}`,
+            )}
           />
           <RenderProductChildItem
-            item={totalSaleQnt}
-            title={`${
-              filterBy === 'all' ? 'All sold quantity' : `Sold: ${filteredName}`
-            }`}
-          />
-          <RenderProductChildItem
-            item={totalQnt}
-            title={`${
-              filterBy === 'all'
-                ? 'Remains qnt in stock'
-                : `In stock: ${filteredName}`
-            }`}
+            item={`Qnt: ${totalQnt}`}
+            title={fltTitle(
+              `Current all products in store`,
+              `Curren in store: product-${filteredName}`,
+              `Curren in store: product-${filteredName}, model-${filteredModel}`,
+            )}
           />
         </View>
 
         <View style={{backgroundColor: colors.white}}>
-          <Text style={{fontSize: 20, textAlign: 'center'}}>Amount</Text>
+          <Text style={{fontWeight: 'bold', textAlign: 'center'}}>Amount</Text>
           <RenderProductChildItem
             item={totalProAmount}
-            title={`${
-              filterBy === 'all'
-                ? 'Total purchased amount'
-                : `Purchased: ${filteredName}`
-            }`}
+            title={fltTitle(
+              'Total purchased amount',
+              `Purchased: product-${filteredName}`,
+              `Purchased: product-${filteredName}, model-${filteredModel}`,
+            )}
           />
           <RenderProductChildItem
             item={totalSaleAmount}
-            title={`${
-              filterBy === 'all' ? 'Total sold amount' : `Sold: ${filteredName}`
-            }`}
+            title={fltTitle(
+              `Total sold`,
+              `Sold: product-${filteredName}`,
+              `Sold: product-${filteredName}, model-${filteredModel}`,
+            )}
           />
           <RenderProductChildItem
             item={totalAmount}
-            title={`${
-              filterBy === 'all'
-                ? 'Remains products of amount in stock'
-                : `In stock: ${filteredName}`
-            }`}
+            title={fltTitle(
+              `Current all products in store`,
+              `Curren in store: product-${filteredName}`,
+              `Curren in store: product-${filteredName}, model-${filteredModel}`,
+            )}
           />
         </View>
-      </View>
+      </ScrollView>
     </SafeScreen>
   );
 };
