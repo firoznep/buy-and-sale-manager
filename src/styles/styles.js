@@ -65,6 +65,14 @@ export const styles = StyleSheet.create({
     marginVertical: 5,
   },
 
+  inventoryItem: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    backgroundColor: colors.white,
+    marginVertical: 5,
+  },
+
   itemMainChild: {
     width: '100%',
     flexDirection: 'row',

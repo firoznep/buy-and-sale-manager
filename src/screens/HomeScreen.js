@@ -1,5 +1,11 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {RefreshControl, ScrollView, Text, View} from 'react-native';
+import {
+  RefreshControl,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 
 import _ from 'lodash';
@@ -86,8 +92,10 @@ const HomeScreen = ({navigation}) => {
         refreshControl={
           <RefreshControl refreshing={reFreshing} onRefresh={onRefresh} />
         }>
-        <View style={styles.homeItems}>
-          <Text style={styles.selfAlign}>Balance</Text>
+        <TouchableOpacity
+          style={styles.homeItems}
+          onPress={() => navigation.navigate('Inventory')}>
+          <Text style={styles.selfAlign}>Inventory</Text>
           <RenderProductChildItem
             title="Products Qnt In Stock"
             item={productqnt - saleQnt}
@@ -96,27 +104,7 @@ const HomeScreen = ({navigation}) => {
             title="Amount Of Products In Stock"
             item={formatToCurrencyInd(productAmt - saleAmt)}
           />
-        </View>
-
-        <View style={styles.homeItems}>
-          <Text style={styles.selfAlign}>Purchase</Text>
-
-          <RenderProductChildItem title="Purchase Quantity" item={productqnt} />
-          <RenderProductChildItem
-            title="Purchase Amount"
-            item={formatToCurrencyInd(productAmt)}
-          />
-        </View>
-
-        <View style={styles.homeItems}>
-          <Text style={styles.selfAlign}>Sale</Text>
-
-          <RenderProductChildItem title="Sale Quantity" item={saleQnt} />
-          <RenderProductChildItem
-            title="Sale Amount"
-            item={formatToCurrencyInd(saleAmt)}
-          />
-        </View>
+        </TouchableOpacity>
       </ScrollView>
     </SafeScreen>
   );

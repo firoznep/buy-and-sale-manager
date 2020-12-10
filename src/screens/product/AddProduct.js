@@ -9,9 +9,14 @@ import _ from 'lodash';
 import SafeScreen from '../../components/basicComponents/SafeScreen';
 import {yupValidationSchema} from '../../util/yupValidationSchema';
 import ProductFormikForm from '../../components/functionalComponents/products/ProductFormikForm';
+import {useDispatch} from 'react-redux';
+import {isPopupMsgVisibleAction} from '../../storeRedux/actions/utilActions';
+import BasicPopupMessage from '../../components/basicComponents/BasicPopupMessage';
 
 // MAIN FUNC --------------------------------------------------------
 const AddProduct = () => {
+  const dispatch = useDispatch();
+
   return (
     <SafeScreen>
       <Formik
@@ -33,11 +38,13 @@ const AddProduct = () => {
         }}
         onSubmit={async (values) => {
           await Products.insert(values);
-          alert('Product added');
+          dispatch(isPopupMsgVisibleAction(true));
         }}
         validationSchema={yupValidationSchema}>
         <ProductFormikForm />
       </Formik>
+
+      <BasicPopupMessage message="Item added to database" />
     </SafeScreen>
   );
 };

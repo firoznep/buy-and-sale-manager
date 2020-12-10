@@ -89,21 +89,19 @@ const SaleFormikForm = () => {
         />
 
         {/* MODEL */}
-        <View>
-          <DropdownPicker
-            selectedValue={values.model}
-            title="Model"
-            onValueChange={handleChange('model')}>
-            {sortedUniqDataByTwoCon(
-              filterAllProduct,
-              values.product_Name,
-              'model',
-            ).map((elm) => {
-              return <Picker.Item label={elm} value={elm} key={randomId()} />;
-            })}
-          </DropdownPicker>
-          <ErrorMsg errField={errors.model} touchedField={touched.model} />
-        </View>
+
+        <DropdownPicker
+          selectedValue={values.model}
+          title="Model"
+          onValueChange={handleChange('model')}>
+          {sortedUniqDataByTwoCon(
+            filterAllProduct,
+            values.product_Name,
+            'model',
+          ).map((elm) => {
+            return <Picker.Item label={elm} value={elm} key={randomId()} />;
+          })}
+        </DropdownPicker>
 
         {/* QUANTITY */}
         <BasicInput

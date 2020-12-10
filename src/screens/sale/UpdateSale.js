@@ -1,17 +1,20 @@
 import React from 'react';
 import {Formik} from 'formik';
 
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import {Sales} from '../../database';
 
 import SafeScreen from '../../components/basicComponents/SafeScreen';
 import {saleYupValidation} from '../../util/saleYupValidation';
 import SaleFormikForm from '../../components/functionalComponents/sale/SaleFormikForm';
+import {isPopupMsgVisibleAction} from '../../storeRedux/actions/utilActions';
+import BasicPopupMessage from '../../components/basicComponents/BasicPopupMessage';
 
 const UpdateSale = () => {
   const updItem = useSelector((state) => state.saleReducer.updateSaleItemById);
 
+  const dispatch = useDispatch();
   return (
     <SafeScreen>
       <Formik
@@ -29,15 +32,16 @@ const UpdateSale = () => {
           total_amount: updItem.total_amount.toString(),
           description: updItem.description,
         }}
-        onSubmit={(values) => {
-          let item1 = Sales.get({id: updItem.id});
-          Sales.update(item1.id, values);
+        onSubmit={async (values) => {
+          let item1 = await Sales.get({id: updItem.id});
+          await Sales.update(item1.id, values);
 
-          alert('updated');
+          dispatch(isPopupMsgVisibleAction(true));
         }}
         validationSchema={saleYupValidation}>
         <SaleFormikForm />
       </Formik>
+      <BasicPopupMessage message="Item updated successfully" />
     </SafeScreen>
   );
 };
