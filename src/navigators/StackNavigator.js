@@ -14,6 +14,8 @@ import AddSale from '../screens/sale/AddSale';
 import {saleFilterScreenVisibleAction} from '../storeRedux/actions/saleAction';
 import UpdateSale from '../screens/sale/UpdateSale';
 import Store from '../screens/store/Store';
+import CustomersDetail from '../screens/customer/CustomersDetail';
+import AddCustomer from '../screens/customer/AddCustomer';
 
 function getHeaderTitle(route) {
   const routeName = getFocusedRouteNameFromRoute(route) ?? 'HomeScreen';
@@ -78,6 +80,9 @@ const StackNavigator = () => {
 
       <Stack.Screen name="AddSale" component={AddSale} />
       <Stack.Screen name="UpdateSale" component={UpdateSale} />
+
+      <Stack.Screen name="CustomersDetail" component={CustomersDetail} />
+      <Stack.Screen name="AddCustomer" component={AddCustomer} />
 
       <Stack.Screen name="Store" component={Store} />
     </Stack.Navigator>

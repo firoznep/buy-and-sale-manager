@@ -12,12 +12,14 @@ import _ from 'lodash';
 
 import SafeScreen from '../components/basicComponents/SafeScreen';
 import {styles} from '../styles/styles';
-import {Products, Sales} from '../database';
+import {Customers, Products, Sales} from '../database';
 import {filterAllDataAction} from '../storeRedux/actions/productActions';
 import {formatToCurrencyInd, getTotal} from '../util/utilFunc';
 import RenderProductChildItem from '../components/functionalComponents/products/RenderProductChildItem';
 import {filterAllSaleDataAction} from '../storeRedux/actions/saleAction';
 import BasicModal from '../components/basicComponents/BasicModal';
+import {allCustomerAction} from '../storeRedux/actions/customerAction';
+import BasicButton from '../components/basicComponents/BasicButton';
 
 const HomeScreen = ({navigation}) => {
   // USESTATES
@@ -31,6 +33,10 @@ const HomeScreen = ({navigation}) => {
     (state) => state.productReducer.filter.allData,
   );
 
+  const allCustomerData = useSelector(
+    (state) => state.customerReducer.allCustomerData,
+  );
+
   const filteredAllSaleData = useSelector(
     (state) => state.saleReducer.filter.allSaleData,
   );
@@ -42,6 +48,7 @@ const HomeScreen = ({navigation}) => {
   useEffect(() => {
     productDatabase();
     saleDatabase();
+    customerDatabase();
   }, []);
 
   useEffect(() => {
@@ -49,6 +56,12 @@ const HomeScreen = ({navigation}) => {
       productDatabase();
     });
   }, [productDatabase]);
+
+  useEffect(() => {
+    Customers.onChange(() => {
+      customerDatabase();
+    });
+  }, [customerDatabase]);
 
   useEffect(() => {
     Sales.onChange(() => {
@@ -74,6 +87,11 @@ const HomeScreen = ({navigation}) => {
   const saleDatabase = async () => {
     const proDatabase = await Sales.data();
     dispatch(filterAllSaleDataAction(proDatabase));
+  };
+
+  const customerDatabase = async () => {
+    const cusDatabase = await Customers.data();
+    dispatch(allCustomerAction(cusDatabase));
   };
 
   let productqnt = getTotal(filteredAllData, 'quantity');
@@ -105,6 +123,11 @@ const HomeScreen = ({navigation}) => {
             item={formatToCurrencyInd(productAmt - saleAmt)}
           />
         </TouchableOpacity>
+
+        <BasicButton
+          title="Go To Customer"
+          onPress={() => navigation.navigate('CustomersDetail')}
+        />
       </ScrollView>
     </SafeScreen>
   );

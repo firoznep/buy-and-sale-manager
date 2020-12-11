@@ -56,7 +56,7 @@ const RenderSaleItems = ({item, handleDelete, handleUpdate}) => {
           unit={item.unit}
           title="Quantity"
           item={item.quantity}
-          unit={item.unit}
+          // unit={item.unit}
           itemFontWeight="bold"
           itemColor={colors.fbBlue}
         />
