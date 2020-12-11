@@ -21,7 +21,7 @@ import ModalItem from '../../components/functionalComponents/products/ModalItem'
 import {colors} from '../../colors/colors';
 import RenderProductChildItem from '../../components/functionalComponents/products/RenderProductChildItem';
 import {formatToCurrencyInd, getTotal} from '../../util/utilFunc';
-import {handleDelete} from '../../util/handleDelete';
+import {dltAllPro, handleDelete} from '../../util/handleDelete';
 import BasicFlatList from '../../components/basicComponents/BasicFlatList';
 import FlatListHeaderDetail from '../../components/functionalComponents/FlatListHeaderDetail';
 
@@ -31,7 +31,7 @@ const ProductDetail = ({navigation}) => {
   const [filteredData, setFilteredData] = useState([]);
   const [filterBy, setFilterBy] = useState('');
   const [totalQnt, setTotalQnt] = useState('');
-  const [totalRealCost, setTotalRealCost] = useState('');
+  // const [totalRealCost, setTotalRealCost] = useState('');
   const [totalAmount, setTotalAmount] = useState('');
 
   // USESELECTOR
@@ -72,7 +72,7 @@ const ProductDetail = ({navigation}) => {
 
   useEffect(() => {
     setTotalQnt(getTotal(filteredData, 'quantity'));
-    setTotalRealCost(getTotal(filteredData, 'real_cost'));
+    // setTotalRealCost(getTotal(filteredData, 'real_cost'));
     setTotalAmount(getTotal(filteredData, 'total_amount'));
   }, [filteredData]);
 
@@ -193,11 +193,11 @@ const ProductDetail = ({navigation}) => {
             title="Total Quantity"
             itemFontWeight="bold"
           />
-          <RenderProductChildItem
+          {/* <RenderProductChildItem
             item={formatToCurrencyInd(totalRealCost)}
             title="Total Real Cost"
             itemFontWeight="bold"
-          />
+          /> */}
           <RenderProductChildItem
             item={formatToCurrencyInd(totalAmount)}
             title="Total Amount"

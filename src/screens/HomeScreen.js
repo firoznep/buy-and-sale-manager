@@ -94,14 +94,14 @@ const HomeScreen = ({navigation}) => {
         }>
         <TouchableOpacity
           style={styles.homeItems}
-          onPress={() => navigation.navigate('Inventory')}>
-          <Text style={styles.selfAlign}>Inventory</Text>
+          onPress={() => navigation.navigate('Store')}>
+          <Text style={styles.selfAlign}>Store</Text>
           <RenderProductChildItem
-            title="Products Qnt In Stock"
+            title="Products Qnt In Store"
             item={productqnt - saleQnt}
           />
           <RenderProductChildItem
-            title="Amount Of Products In Stock"
+            title="Amount Of Products In Store"
             item={formatToCurrencyInd(productAmt - saleAmt)}
           />
         </TouchableOpacity>

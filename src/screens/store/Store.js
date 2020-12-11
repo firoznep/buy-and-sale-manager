@@ -18,7 +18,7 @@ import {styles} from '../../styles/styles';
 import SafeScreen from '../../components/basicComponents/SafeScreen';
 import {colors} from '../../colors/colors';
 
-const Inventory = () => {
+const Store = () => {
   // USESTATES
 
   const [filteredData, setFilteredData] = useState('');
@@ -61,7 +61,7 @@ const Inventory = () => {
 
   const getRemainingQnt = (data, type, by, mapBy = 'quantity') => {
     let res = _.sum(
-      data.filter((itm) => itm[type] === by).map((i) => i[mapBy]),
+      data.filter((itm) => itm[type] === by).map((i) => Number(i[mapBy])),
     );
     return res;
   };
@@ -70,7 +70,7 @@ const Inventory = () => {
     let res = _.sum(
       data
         .filter((itm) => itm[nameType] === byName && itm.model === byModel)
-        .map((i) => i[mapBy]),
+        .map((i) => Number(i[mapBy])),
     );
     return res;
   };
@@ -90,8 +90,8 @@ const Inventory = () => {
   const setDataByfiltering = () => {
     switch (filterBy) {
       case 'all':
-        let fpaq = _.sum(filteredAllData.map((i) => i.quantity));
-        let fsaq = _.sum(filteredAllSaleData.map((i) => i.quantity));
+        let fpaq = _.sum(filteredAllData.map((i) => Number(i.quantity)));
+        let fsaq = _.sum(filteredAllSaleData.map((i) => Number(i.quantity)));
 
         let fpaa = _.sum(filteredAllData.map((i) => i.total_amount));
         let fsaa = _.sum(filteredAllSaleData.map((i) => i.total_amount));
@@ -202,7 +202,6 @@ const Inventory = () => {
           style={{
             backgroundColor: colors.white,
             marginVertical: 5,
-            borderLeftWidth: 1,
           }}>
           <BasicRadioButton
             radioTitle="Show All"
@@ -216,7 +215,7 @@ const Inventory = () => {
           />
         </View>
 
-        <View style={{backgroundColor: colors.white, borderLeftWidth: 1}}>
+        <View style={{backgroundColor: colors.white}}>
           <BasicRadioButton
             radioTitle="Filter by product name"
             selected={selectedTwo}
@@ -241,7 +240,6 @@ const Inventory = () => {
         <View
           style={{
             backgroundColor: colors.white,
-            borderLeftWidth: 1,
             marginVertical: 5,
           }}>
           <BasicRadioButton
@@ -276,12 +274,19 @@ const Inventory = () => {
       </ScrollView>
 
       {/* RESULT */}
-      <ScrollView style={{flex: 1}}>
+      <ScrollView
+        style={{
+          flex: 1,
+          backgroundColor: colors.backGColor,
+          padding: 5,
+          marginTop: 10,
+        }}>
         <View style={{backgroundColor: colors.white, marginVertical: 10}}>
           <Text style={{fontWeight: 'bold', textAlign: 'center'}}>
             Quantity
           </Text>
           <RenderProductChildItem
+            maxWidth={'100%'}
             item={`Qnt: ${totalProQnt}`}
             title={fltTitle(
               'Total purchased',
@@ -291,6 +296,7 @@ const Inventory = () => {
           />
 
           <RenderProductChildItem
+            maxWidth={'100%'}
             item={`Qnt: ${totalSaleQnt}`}
             title={fltTitle(
               `Total sold`,
@@ -299,6 +305,7 @@ const Inventory = () => {
             )}
           />
           <RenderProductChildItem
+            maxWidth={'100%'}
             item={`Qnt: ${totalQnt}`}
             title={fltTitle(
               `Current all products in store`,
@@ -311,6 +318,7 @@ const Inventory = () => {
         <View style={{backgroundColor: colors.white}}>
           <Text style={{fontWeight: 'bold', textAlign: 'center'}}>Amount</Text>
           <RenderProductChildItem
+            maxWidth={'100%'}
             item={totalProAmount}
             title={fltTitle(
               'Total purchased amount',
@@ -319,6 +327,7 @@ const Inventory = () => {
             )}
           />
           <RenderProductChildItem
+            maxWidth={'100%'}
             item={totalSaleAmount}
             title={fltTitle(
               `Total sold`,
@@ -327,6 +336,7 @@ const Inventory = () => {
             )}
           />
           <RenderProductChildItem
+            maxWidth={'100%'}
             item={totalAmount}
             title={fltTitle(
               `Current all products in store`,
@@ -340,4 +350,4 @@ const Inventory = () => {
   );
 };
 
-export default Inventory;
+export default Store;

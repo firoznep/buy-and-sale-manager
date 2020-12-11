@@ -13,7 +13,7 @@ import BasicButton from '../components/basicComponents/BasicButton';
 import AddSale from '../screens/sale/AddSale';
 import {saleFilterScreenVisibleAction} from '../storeRedux/actions/saleAction';
 import UpdateSale from '../screens/sale/UpdateSale';
-import Inventory from '../screens/inventory/Inventory';
+import Store from '../screens/store/Store';
 
 function getHeaderTitle(route) {
   const routeName = getFocusedRouteNameFromRoute(route) ?? 'HomeScreen';
@@ -79,7 +79,7 @@ const StackNavigator = () => {
       <Stack.Screen name="AddSale" component={AddSale} />
       <Stack.Screen name="UpdateSale" component={UpdateSale} />
 
-      <Stack.Screen name="Inventory" component={Inventory} />
+      <Stack.Screen name="Store" component={Store} />
     </Stack.Navigator>
   );
 };

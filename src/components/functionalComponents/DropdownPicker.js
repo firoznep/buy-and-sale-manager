@@ -10,10 +10,12 @@ const DropdownPicker = ({
   color = colors.fbBlue,
   selectedValue,
   minWidth = 120,
+  style,
   children,
 }) => {
   return (
-    <View style={{backgroundColor: backgroundColor, marginVertical: 5}}>
+    <View
+      style={[{backgroundColor: backgroundColor, marginVertical: 5}, style]}>
       <Text style={{color: colors.phGray, marginLeft: 10}}>{title}</Text>
       <Picker
         style={{

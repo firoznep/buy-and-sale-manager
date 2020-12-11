@@ -12,7 +12,7 @@ import BasicModal from '../../components/basicComponents/BasicModal';
 import {colors} from '../../colors/colors';
 import RenderProductChildItem from '../../components/functionalComponents/products/RenderProductChildItem';
 import {formatToCurrencyInd, getTotal} from '../../util/utilFunc';
-import {handleDelete} from '../../util/handleDelete';
+import {dltAllPro, handleDelete} from '../../util/handleDelete';
 import BasicFlatList from '../../components/basicComponents/BasicFlatList';
 import FlatListHeaderDetail from '../../components/functionalComponents/FlatListHeaderDetail';
 import {
@@ -30,7 +30,7 @@ const SaleDetail = ({navigation}) => {
   const [filterBy, setFilterBy] = useState('');
 
   const [totalQnt, setTotalQnt] = useState('');
-  const [totalRealCost, setTotalRealCost] = useState('');
+  // const [totalRealCost, setTotalRealCost] = useState('');
   const [totalAmount, setTotalAmount] = useState('');
 
   // USESELECTOR
@@ -71,7 +71,7 @@ const SaleDetail = ({navigation}) => {
 
   useEffect(() => {
     setTotalQnt(getTotal(filteredData, 'quantity'));
-    setTotalRealCost(getTotal(filteredData, 'price'));
+    // setTotalRealCost(getTotal(filteredData, 'price'));
     setTotalAmount(getTotal(filteredData, 'total_amount'));
   }, [filteredData]);
 
@@ -194,11 +194,11 @@ const SaleDetail = ({navigation}) => {
             title="Total Quantity"
             itemFontWeight="bold"
           />
-          <RenderProductChildItem
+          {/* <RenderProductChildItem
             item={formatToCurrencyInd(totalRealCost)}
             title="Total Price"
             itemFontWeight="bold"
-          />
+          /> */}
           <RenderProductChildItem
             item={formatToCurrencyInd(totalAmount)}
             title="Total Amount"

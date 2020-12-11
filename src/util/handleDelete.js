@@ -1,9 +1,8 @@
 import {Alert} from 'react-native';
-import {Products} from '../database';
 
-export const dltAllPro = () => {
-  Products.perform(function (db) {
-    Products.data().forEach(function (item) {
+export const dltAllPro = (dt) => {
+  dt.perform(function (db) {
+    dt.data().forEach(function (item) {
       db.remove(item);
     });
   });
