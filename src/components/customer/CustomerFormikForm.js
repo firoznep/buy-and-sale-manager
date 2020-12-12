@@ -6,30 +6,14 @@ import {useFormikContext} from 'formik';
 
 import _ from 'lodash';
 
-import {useSelector} from 'react-redux';
-
 import BasicInput from '../basicComponents/BasicInput';
 import ModalDateTimePicker from '../basicComponents/ModalDateTimePicker';
 import BasicButton from '../basicComponents/BasicButton';
 import ErrorMsg from '../functionalComponents/ErrorMsg';
 import {styles} from '../../styles/styles';
-import {getTotalAmt} from '../../util/utilFunc';
 
 // MAIN COMPONENT
 const CustomerFormikForm = () => {
-  // USESELECTORS
-  // const filterAllProduct = useSelector((state) =>
-  //   state.productReducer.filter.allData.sort(
-  //     (a, b) => new Date(b.date) - new Date(a.date),
-  //   ),
-  // );
-
-  // const filterAllSaleProduct = useSelector((state) =>
-  //   state.saleReducer.filter.allSaleData.sort(
-  //     (a, b) => new Date(b.date) - new Date(a.date),
-  //   ),
-  // );
-
   // USEFORMIKCONTEXT
   const {
     values,
@@ -40,14 +24,6 @@ const CustomerFormikForm = () => {
     touched,
     errors,
   } = useFormikContext();
-
-  // USEEFFECT
-  // useEffect(() => {
-  //   setFieldValue(
-  //     'total_amount',
-  //     getTotalAmt(values.price, 0, values.quantity),
-  //   );
-  // }, [values.price, values.quantity]);
 
   // MAIN RETURN
   return (
@@ -82,6 +58,7 @@ const CustomerFormikForm = () => {
             onChangeText={handleChange('contact')}
             onBlur={handleBlur('contact')}
             value={values.contact}
+            keyboardType="numeric"
           />
           <ErrorMsg errField={errors.contact} touchedField={touched.contact} />
         </View>

@@ -8,8 +8,9 @@ const RightAction = ({deleteButtonRight, updateButtonRight}) => {
   return (
     <View
       style={{
-        margin: 5,
+        // margin: 5,
         justifyContent: 'space-between',
+        alignItems: 'center',
       }}>
       <BasicButton
         onPress={deleteButtonRight}

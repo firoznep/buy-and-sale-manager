@@ -8,6 +8,7 @@ import RenderCustomer from '../../components/customer/RenderCustomers';
 import {Customers} from '../../database';
 import {customerFlatListRefreshedAction} from '../../storeRedux/actions/customerAction';
 import {styles} from '../../styles/styles';
+import {handleDelete} from '../../util/handleDelete';
 
 const CustomersDetail = ({navigation}) => {
   // USESTATES
@@ -30,7 +31,14 @@ const CustomersDetail = ({navigation}) => {
   // USEEFFECT
   useEffect(() => {
     setAllCustomers(allCustomersDataFromReducer);
+    console.log('only on start');
   }, []);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setAllCustomers(allCustomersDataFromReducer);
+    }, 1000);
+  }, [allCustomersDataFromReducer]);
 
   // ONFRESH
   const onRefresh = useCallback(() => {
@@ -38,6 +46,9 @@ const CustomersDetail = ({navigation}) => {
     setAllCustomers(allCustomersDataFromReducer);
     dispatch(customerFlatListRefreshedAction(false));
   });
+
+  console.log('allCustomersDAta', allCustomersDataFromReducer.length);
+  console.log('allCustomers', allCustomers.length);
 
   return (
     <SafeScreen>

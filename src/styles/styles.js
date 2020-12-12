@@ -24,7 +24,7 @@ export const styles = StyleSheet.create({
     backgroundColor: 'red',
     borderWidth: 0,
     minWidth: 70,
-    height: '45%',
+    height: '35%',
   },
 
   childItem: {

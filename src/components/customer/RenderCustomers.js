@@ -36,6 +36,7 @@ const RenderCustomer = ({item, handleDelete, handleUpdate}) => {
           title="Customer Name"
           item={item.name}
           itemFontWeight="bold"
+          itemColor={colors.darkGreen}
         />
 
         <RenderProductChildItem

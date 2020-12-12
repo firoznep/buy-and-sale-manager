@@ -19,9 +19,13 @@ import {sortedUniqDataByTwoCon, sortedUniqBy} from '../../../util/sortedUniq';
 import {useSelector} from 'react-redux';
 import BasicButton from '../../basicComponents/BasicButton';
 import DropdownPicker from '../DropdownPicker';
+import BasicIcon from '../../basicComponents/BasicIcon';
+import {useNavigation} from '@react-navigation/native';
 
 // MAIN COMPONENT
 const SaleFormikForm = () => {
+  const navigation = useNavigation();
+
   // USESELECTORS
   const filterAllProduct = useSelector((state) =>
     state.productReducer.filter.allData.sort(
@@ -31,6 +35,12 @@ const SaleFormikForm = () => {
 
   const filterAllSaleProduct = useSelector((state) =>
     state.saleReducer.filter.allSaleData.sort(
+      (a, b) => new Date(b.date) - new Date(a.date),
+    ),
+  );
+
+  const allCustomersDataFromReducer = useSelector((state) =>
+    state.customerReducer.allCustomerData.sort(
       (a, b) => new Date(b.date) - new Date(a.date),
     ),
   );
@@ -65,14 +75,29 @@ const SaleFormikForm = () => {
         />
 
         {/* CUSTOMER NAME */}
-        <BasicDropdownPicker
-          selectedValue={values.customer}
-          title="Customer Name"
-          onValueChange={handleChange('customer')}>
-          {sortedUniqBy(filterAllSaleProduct, 'customer').map((elm) => {
-            return <Picker.Item label={elm} value={elm} key={randomId()} />;
-          })}
-        </BasicDropdownPicker>
+        <View
+          style={{
+            flexDirection: 'row',
+            width: '100%',
+            backgroundColor: colors.white,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <DropdownPicker
+            minWidth={'80%'}
+            selectedValue={values.customer}
+            title="Customer Name"
+            onValueChange={handleChange('customer')}>
+            {sortedUniqBy(allCustomersDataFromReducer, 'name').map((elm) => {
+              return <Picker.Item label={elm} value={elm} key={randomId()} />;
+            })}
+          </DropdownPicker>
+          <BasicButton
+            iconName="plus-circle"
+            style={{borderWidth: 0}}
+            onPress={() => navigation.navigate('AddCustomer')}
+          />
+        </View>
 
         {/* PRODUCT NAME */}
         <DropdownPicker
