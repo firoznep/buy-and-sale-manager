@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 
-import {ScrollView, View} from 'react-native';
+import {ScrollView, View, Text} from 'react-native';
 
 import {useFormikContext} from 'formik';
 
@@ -101,7 +101,7 @@ const SaleFormikForm = () => {
 
         {/* PRODUCT NAME */}
         <DropdownPicker
-          title="Product Name"
+          title="Product Name *"
           selectedValue={values.product_Name}
           onValueChange={handleChange('product_Name')}>
           {sortedUniqBy(filterAllProduct, 'name').map((elm) => {
@@ -127,6 +127,7 @@ const SaleFormikForm = () => {
             return <Picker.Item label={elm} value={elm} key={randomId()} />;
           })}
         </DropdownPicker>
+        <ErrorMsg errField={errors.model} touchedField={touched.model} />
 
         {/* QUANTITY */}
         <BasicInput
@@ -167,14 +168,20 @@ const SaleFormikForm = () => {
             justifyContent: 'space-between',
           }}>
           {/* PAYMENT METHOD */}
-          <DropdownPicker
-            selectedValue={values.payment_method}
-            title="Payment Method"
-            onValueChange={handleChange('payment_method')}>
-            <Picker.Item label="Cash" value="Cash" />
-            <Picker.Item label="Credit" value="Credit" />
-          </DropdownPicker>
-
+          <View>
+            <DropdownPicker
+              minWidth={140}
+              selectedValue={values.payment_method}
+              title="Payment Type"
+              onValueChange={handleChange('payment_method')}>
+              <Picker.Item label="Cash" value="Cash" />
+              <Picker.Item label="Credit" value="Credit" />
+            </DropdownPicker>
+            <ErrorMsg
+              errField={errors.payment_method}
+              touchedField={touched.payment_method}
+            />
+          </View>
           {/* COLOR */}
           <View>
             <DropdownPicker
@@ -200,7 +207,7 @@ const SaleFormikForm = () => {
 
           {/* SIZE */}
           <DropdownPicker
-            minWidth={145}
+            minWidth={140}
             selectedValue={values.size}
             title="Size"
             onValueChange={handleChange('size')}>
@@ -234,6 +241,7 @@ const SaleFormikForm = () => {
           onChangeText={handleChange('description')}
           value={values.description}
         />
+        <View style={{height: 100}}></View>
       </ScrollView>
       <BasicButton
         style={styles.roundBtn}

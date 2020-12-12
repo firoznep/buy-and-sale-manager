@@ -82,11 +82,83 @@ const ProductFormikForm = () => {
         <BasicDropdownPicker
           selectedValue={values.model}
           onValueChange={handleChange('model')}
-          title="Model">
+          title="Model or Design or any category *">
           {sortedUniqBy(filteredAllData, 'model').map((ven) => (
             <Picker.Item label={ven} value={ven} key={randomId()} />
           ))}
         </BasicDropdownPicker>
+        <ErrorMsg errField={errors.model} touchedField={touched.model} />
+
+        {/* QUANTITY */}
+        <BasicInput
+          label="Quantity *"
+          onChangeText={handleChange('quantity')}
+          onBlur={handleBlur('quantity')}
+          keyboardType="numeric"
+          value={values.quantity}
+        />
+        <ErrorMsg errField={errors.quantity} touchedField={touched.quantity} />
+
+        {/* UNIT */}
+        <DropdownPicker
+          title="Unit"
+          selectedValue={values.unit}
+          onValueChange={handleChange('unit')}>
+          <Picker.Item label="Pick Unit" value="" key={randomId()} />
+          <Picker.Item label="pcs" value="pcs" key={randomId()} />
+          <Picker.Item label="metre" value="metre" key={randomId()} />
+          <Picker.Item label="than" value="than" key={randomId()} />
+          <Picker.Item label="kg" value="kg" key={randomId()} />
+          <Picker.Item label="ltr" value="ltr" key={randomId()} />
+          <Picker.Item label="guz" value="guz" key={randomId()} />
+          <Picker.Item label="inch" value="inch" key={randomId()} />
+          <Picker.Item label="gallon" value="gallon" key={randomId()} />
+        </DropdownPicker>
+
+        {/* COST PRICE */}
+        <BasicInput
+          label="Primary cost on per unit *"
+          onChangeText={handleChange('cost_price')}
+          onBlur={handleBlur('cost_price')}
+          keyboardType="numeric"
+          value={values.cost_price}
+        />
+        <ErrorMsg
+          errField={errors.cost_price}
+          touchedField={touched.cost_price}
+        />
+
+        {/* EXPENSES */}
+        <BasicInput
+          label="Expenses On per unit (tax, vat,transport...)"
+          onChangeText={handleChange('expenses')}
+          onBlur={handleBlur('expenses')}
+          keyboardType="numeric"
+          value={values.expenses}
+        />
+
+        <View
+          style={{
+            backgroundColor: colors.white,
+            padding: values.real_cost ? 10 : 0,
+            marginVertical: values.real_cost ? 5 : 0,
+          }}>
+          <RenderItemChild
+            title="Real Cost (Auto Update)"
+            itemField={values.real_cost}
+          />
+        </View>
+        <View
+          style={{
+            backgroundColor: colors.white,
+            padding: values.total_amount ? 10 : 0,
+            marginVertical: values.total_amount ? 5 : 0,
+          }}>
+          <RenderItemChild
+            title="Total Amount (Auto Update)"
+            itemField={values.total_amount}
+          />
+        </View>
 
         {/* SIZE */}
         <DropdownPicker
@@ -111,74 +183,6 @@ const ProductFormikForm = () => {
           onBlur={handleBlur('color')}
           value={values.color}
         />
-
-        {/* UNIT */}
-        <DropdownPicker
-          title="Unit"
-          selectedValue={values.unit}
-          onValueChange={handleChange('unit')}>
-          <Picker.Item label="Pick Unit" value="" key={randomId()} />
-          <Picker.Item label="pcs" value="pcs" key={randomId()} />
-          <Picker.Item label="metre" value="metre" key={randomId()} />
-          <Picker.Item label="than" value="than" key={randomId()} />
-          <Picker.Item label="kg" value="kg" key={randomId()} />
-          <Picker.Item label="ltr" value="ltr" key={randomId()} />
-          <Picker.Item label="guz" value="guz" key={randomId()} />
-          <Picker.Item label="inch" value="inch" key={randomId()} />
-          <Picker.Item label="gallon" value="gallon" key={randomId()} />
-        </DropdownPicker>
-
-        {/* QUANTITY */}
-        <BasicInput
-          label="Quantity *"
-          onChangeText={handleChange('quantity')}
-          onBlur={handleBlur('quantity')}
-          keyboardType="numeric"
-          value={values.quantity}
-        />
-        <ErrorMsg errField={errors.quantity} touchedField={touched.quantity} />
-
-        {/* COST PRICE */}
-        <BasicInput
-          label="Primary cost on per unit *"
-          onChangeText={handleChange('cost_price')}
-          onBlur={handleBlur('cost_price')}
-          keyboardType="numeric"
-          value={values.cost_price}
-        />
-        <ErrorMsg
-          errField={errors.cost_price}
-          touchedField={touched.cost_price}
-        />
-
-        {/* EXPENSES */}
-        <BasicInput
-          label="Expenses On per unit (vat,transport...)"
-          onChangeText={handleChange('expenses')}
-          onBlur={handleBlur('expenses')}
-          keyboardType="numeric"
-          value={values.expenses}
-        />
-
-        <View
-          style={{
-            backgroundColor: colors.white,
-            padding: values.real_cost ? 10 : 0,
-            marginVertical: values.real_cost ? 5 : 0,
-          }}>
-          <RenderItemChild title="Real Cost" itemField={values.real_cost} />
-        </View>
-        <View
-          style={{
-            backgroundColor: colors.white,
-            padding: values.total_amount ? 10 : 0,
-            marginVertical: values.total_amount ? 5 : 0,
-          }}>
-          <RenderItemChild
-            title="Total Amount"
-            itemField={values.total_amount}
-          />
-        </View>
 
         {/* DESCRIPTION */}
         <BasicInput

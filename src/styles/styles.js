@@ -108,7 +108,7 @@ export const styles = StyleSheet.create({
     borderRadius: 50,
     width: 60,
     height: 60,
-    backgroundColor: 'yellow',
+    backgroundColor: colors.backGColor,
     borderWidth: 0,
     elevation: 10,
     zIndex: 99,

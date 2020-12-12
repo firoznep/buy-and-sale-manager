@@ -12,13 +12,16 @@ import _ from 'lodash';
 
 import SafeScreen from '../components/basicComponents/SafeScreen';
 import {styles} from '../styles/styles';
-import {Customers, Products, Sales} from '../database';
+import {Customers, CustomersPay, Products, Sales} from '../database';
 import {filterAllDataAction} from '../storeRedux/actions/productActions';
 import {formatToCurrencyInd, getTotal} from '../util/utilFunc';
 import RenderProductChildItem from '../components/functionalComponents/products/RenderProductChildItem';
 import {filterAllSaleDataAction} from '../storeRedux/actions/saleAction';
 import BasicModal from '../components/basicComponents/BasicModal';
-import {allCustomerAction} from '../storeRedux/actions/customerAction';
+import {
+  allCustomerAction,
+  allCustomersPayAction,
+} from '../storeRedux/actions/customerAction';
 import BasicButton from '../components/basicComponents/BasicButton';
 
 const HomeScreen = ({navigation}) => {
@@ -33,10 +36,6 @@ const HomeScreen = ({navigation}) => {
     (state) => state.productReducer.filter.allData,
   );
 
-  const allCustomerData = useSelector(
-    (state) => state.customerReducer.allCustomerData,
-  );
-
   const filteredAllSaleData = useSelector(
     (state) => state.saleReducer.filter.allSaleData,
   );
@@ -49,6 +48,7 @@ const HomeScreen = ({navigation}) => {
     productDatabase();
     saleDatabase();
     customerDatabase();
+    customerPayDatabase();
   }, []);
 
   useEffect(() => {
@@ -62,6 +62,12 @@ const HomeScreen = ({navigation}) => {
       customerDatabase();
     });
   }, [customerDatabase]);
+
+  useEffect(() => {
+    Customers.onChange(() => {
+      customerPayDatabase();
+    });
+  }, [customerPayDatabase]);
 
   useEffect(() => {
     Sales.onChange(() => {
@@ -92,6 +98,11 @@ const HomeScreen = ({navigation}) => {
   const customerDatabase = async () => {
     const cusDatabase = await Customers.data();
     dispatch(allCustomerAction(cusDatabase));
+  };
+
+  const customerPayDatabase = async () => {
+    const cusDatabase = await CustomersPay.data();
+    dispatch(allCustomersPayAction(cusDatabase));
   };
 
   let productqnt = getTotal(filteredAllData, 'quantity');

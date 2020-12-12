@@ -17,6 +17,7 @@ import DropdownPicker from '../../components/functionalComponents/DropdownPicker
 import {styles} from '../../styles/styles';
 import SafeScreen from '../../components/basicComponents/SafeScreen';
 import {colors} from '../../colors/colors';
+import {getRemainingQnt, getNameModelAmtQnt} from '../../util/filterMapSumFunc';
 
 const Store = () => {
   // USESTATES
@@ -28,8 +29,6 @@ const Store = () => {
   const [totalQnt, setTotalQnt] = useState('');
   const [totalProQnt, setTotalProQnt] = useState('');
   const [totalSaleQnt, setTotalSaleQnt] = useState('');
-
-  const [totalRealCost, setTotalRealCost] = useState('');
 
   const [totalAmount, setTotalAmount] = useState('');
   const [totalProAmount, setTotalProAmount] = useState('');
@@ -58,22 +57,6 @@ const Store = () => {
   }, [filteredName, selectedOne, selectedTwo, selectedThree, filteredModel]);
 
   // FUNCTIONS
-
-  const getRemainingQnt = (data, type, by, mapBy = 'quantity') => {
-    let res = _.sum(
-      data.filter((itm) => itm[type] === by).map((i) => Number(i[mapBy])),
-    );
-    return res;
-  };
-
-  const getNameModelAmtQnt = (data, nameType, byName, byModel, mapBy) => {
-    let res = _.sum(
-      data
-        .filter((itm) => itm[nameType] === byName && itm.model === byModel)
-        .map((i) => Number(i[mapBy])),
-    );
-    return res;
-  };
 
   const filterNameModelMap = () => {
     const filterNameModel = filteredAllData.filter(

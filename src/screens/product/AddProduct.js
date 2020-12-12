@@ -26,7 +26,7 @@ const AddProduct = () => {
           vendor: '',
           name: '',
           model: '',
-          size: 'FREE-SIZE',
+          size: '',
           color: '',
           unit: 'pcs',
           quantity: '',

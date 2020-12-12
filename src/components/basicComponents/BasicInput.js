@@ -39,6 +39,7 @@ const BasicInput = ({
         selectTextOnFocus={true}
         value={value}
         autoCapitalize="none"
+        autoCorrect={false}
         {...otherProps}
       />
 

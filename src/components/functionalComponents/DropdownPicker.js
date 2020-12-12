@@ -10,6 +10,8 @@ const DropdownPicker = ({
   color = colors.fbBlue,
   selectedValue,
   minWidth = 120,
+  maxWidth = '100%',
+  width = '100%',
   style,
   children,
 }) => {
@@ -22,6 +24,8 @@ const DropdownPicker = ({
           backgroundColor: backgroundColor,
           color: color,
           minWidth: minWidth,
+          maxHeight: maxWidth,
+          width: width,
         }}
         mode="dropdown"
         selectedValue={selectedValue}

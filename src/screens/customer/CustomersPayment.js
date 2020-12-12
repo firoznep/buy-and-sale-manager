@@ -1,22 +1,32 @@
-import React, {useState} from 'react';
+import React from 'react';
 
 import {Formik} from 'formik';
 
-import {Customers} from '../../database';
+import {CustomersPay} from '../../database';
 
 import _ from 'lodash';
 
+import * as yup from 'yup';
+
+import {useDispatch} from 'react-redux';
+
 import SafeScreen from '../../components/basicComponents/SafeScreen';
 import BasicPopupMessage from '../../components/basicComponents/BasicPopupMessage';
-import {useDispatch} from 'react-redux';
 import {isPopupMsgVisibleAction} from '../../storeRedux/actions/utilActions';
 
-import * as yup from 'yup';
-import CustomerFormikForm from '../../components/customer/CustomerFormikForm';
-import {customerYupValidation} from '../../util/customerYupValidation';
+import CustomerPayFormikForm from '../../components/customer/CustomerPayFormikForm';
+
+const customerPayYupValidation = yup.object().shape({
+  name: yup
+    .string()
+    .min(2, 'Too short')
+    .max(50, 'Too long')
+    .required('Required'),
+  amount: yup.number().min(1).required('Required'),
+});
 
 // MAIN FUNC --------------------------------------------------------
-const AddCustomer = () => {
+const CustomersPayment = () => {
   const dispatch = useDispatch();
 
   return (
@@ -25,19 +35,18 @@ const AddCustomer = () => {
         initialValues={{
           date: new Date(),
           name: '',
-          address: '',
-          contact: '',
+          amount: '',
         }}
         onSubmit={async (values) => {
-          await Customers.insert(values);
+          await CustomersPay.insert(values);
           dispatch(isPopupMsgVisibleAction(true));
         }}
-        validationSchema={customerYupValidation}>
-        <CustomerFormikForm />
+        validationSchema={customerPayYupValidation}>
+        <CustomerPayFormikForm />
       </Formik>
       <BasicPopupMessage message="Customer added to database" />
     </SafeScreen>
   );
 };
 
-export default AddCustomer;
+export default CustomersPayment;

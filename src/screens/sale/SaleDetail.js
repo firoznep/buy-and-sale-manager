@@ -30,7 +30,6 @@ const SaleDetail = ({navigation}) => {
   const [filterBy, setFilterBy] = useState('');
 
   const [totalQnt, setTotalQnt] = useState('');
-  // const [totalRealCost, setTotalRealCost] = useState('');
   const [totalAmount, setTotalAmount] = useState('');
 
   // USESELECTOR
@@ -71,7 +70,6 @@ const SaleDetail = ({navigation}) => {
 
   useEffect(() => {
     setTotalQnt(getTotal(filteredData, 'quantity'));
-    // setTotalRealCost(getTotal(filteredData, 'price'));
     setTotalAmount(getTotal(filteredData, 'total_amount'));
   }, [filteredData]);
 
@@ -143,6 +141,7 @@ const SaleDetail = ({navigation}) => {
           ),
         );
         break;
+
       default:
         setFilteredData(
           filteredAllData.filter(
@@ -194,11 +193,7 @@ const SaleDetail = ({navigation}) => {
             title="Total Quantity"
             itemFontWeight="bold"
           />
-          {/* <RenderProductChildItem
-            item={formatToCurrencyInd(totalRealCost)}
-            title="Total Price"
-            itemFontWeight="bold"
-          /> */}
+
           <RenderProductChildItem
             item={formatToCurrencyInd(totalAmount)}
             title="Total Amount"

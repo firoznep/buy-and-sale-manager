@@ -9,6 +9,7 @@ import BasicButton from './BasicButton';
 const ModalDateTimePicker = ({
   pickedDateTime,
   title = new Date().toDateString('en-US'),
+  width = '100%',
 }) => {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
@@ -26,7 +27,7 @@ const ModalDateTimePicker = ({
   };
 
   return (
-    <View>
+    <View style={{width: width}}>
       <BasicButton
         title={title}
         iconName="calendar-alt"
